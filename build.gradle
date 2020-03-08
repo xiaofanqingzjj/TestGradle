@@ -1,22 +1,12 @@
-plugins {
-    id 'java'
+
+
+allprojects {
+    repositories {
+        jcenter()
+    }
 }
 
-//apply from "test.gradle"
 
-apply {
-    from("test.gradle")
-}
-
-group 'org.example'
-version '1.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
-
-repositories {
-//    mavenCentral()
-}
-
-dependencies {
-//    testCompile group: 'junit', name: 'junit', version: '4.12'
+subprojects {
+    version = '1.0'
 }

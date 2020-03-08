@@ -1,0 +1,11 @@
+
+plugins {
+    id "java"
+    id "application"
+}
+
+mainClassName="com.testapp.Greeter"
+
+dependencies {
+    compile project(":testGroovy")
+}

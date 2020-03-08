@@ -33,14 +33,28 @@ class TestHello {
         }
 
         // 使用java的方式执行一条命令行程序
-        println(executeCommand("ls -l"))
+        println(execByGroovy("ls -l"))
+
+
+        // groovy也有像kotlin那样的安全运算符号?.
+        String str = null;
+        println("str length:${str?.length()}")
+
 
 
 
     }
 
+
+
+
+    class Person {
+        String name;
+
+    }
+
     // execute command line in java
-    static String executeCommand(String command) {
+    static String executeCommandByJava(String command) {
         final Process process = Runtime.getRuntime().exec(command)
         BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))
 
@@ -50,6 +64,11 @@ class TestHello {
             sb.append("$line\n")
         }
         return sb.toString()
+    }
+
+    // execute command by groovy
+    static String execByGroovy(String command) {
+        return command.execute().text
     }
 
 }

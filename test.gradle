@@ -1,0 +1,15 @@
+
+
+task helloWolrd  {
+    doLast {
+        println("hello world!!")
+    }
+
+}
+
+// 一个拷贝文件的task
+task copy(type: Copy, group: "Custom", description: "copy sources to dest") {
+    from "src" // 相对根目录
+    into "dest" // 相对根目录
+}
+
