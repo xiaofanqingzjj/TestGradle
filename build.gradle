@@ -10,3 +10,6 @@ allprojects {
 subprojects {
     version = '1.0'
 }
+
+
+apply from: "test.gradle"

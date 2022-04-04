@@ -3,6 +3,10 @@
 
 package test
 
+
+/**
+ * groovy的基础语法
+ */
 class TestHello {
 
     static void main(String[] args) {
@@ -15,7 +19,7 @@ class TestHello {
         float f = 1.1f
         double dv = 111.00
 
-        // 变量的定义有两种方法， 一种是
+        // 变量的定义有两种方法， 一种和java一样，一种是通过类型推导
         def va = 33
 //        def
 
