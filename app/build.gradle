@@ -7,5 +7,137 @@ plugins {
 mainClassName="com.testapp.Greeter"
 
 dependencies {
-    compile project(":testGroovy")
+//    implementation project(":testGroovy")
 }
+
+sourceSets {
+
+    main {
+        java {
+//            include "foo", "java"
+        }
+    }
+
+}
+
+
+// 打印SourceSet的基本信息
+SourceSet mainS = sourceSets.main;
+printSourceSetInfo(mainS)
+void printSourceSetInfo(SourceSet sourceSet) {
+    println("-------- sourceSetInfo -----------")
+    println("name:${sourceSet.name}")
+    println("allJava:${sourceSet.allJava.srcDirs}")
+    println("compileClassPath:${sourceSet.compileClasspath.files}")
+    println("ouput:${sourceSet.output.files}")
+    println("sourceSet.java.srcDirs:${sourceSet.java.srcDirs}")
+    println("-------- sourceSetInfo -----------")
+}
+
+// 获取指定类型的Task
+// 闭包的代理就是返回的对象
+tasks.withType(JavaCompile) {
+
+    // JavaCompile的options对象返回CompileOptions对象
+    options.incremental = false
+
+    println("taskName:${name}")
+    println("inputs:${inputs.files.files}, outputs:${outputs.files.files}")
+    println("increa:${options.incremental}")
+}
+
+SourceSet s;
+SourceDirectorySet sds;
+
+JavaPlugin jp;
+JavaBasePlugin javaBasePlugin;
+
+
+JavaCompile jc;
+
+// --------------- Plugins -------------
+
+
+/**
+ * 定义一个Task
+ */
+abstract  class GreetingToFileTask extends  DefaultTask {
+
+    /**
+     * 指定一个输出文件
+     * @return
+     */
+    @OutputFile
+    abstract RegularFileProperty getDestination();
+
+    @TaskAction
+    def greet() {
+        // 把内容写到输出文件
+        def file = getDestination().get().asFile
+        file.parentFile.mkdirs()
+        file.write 'Hello!'
+    }
+}
+
+/**
+ * Project的objects属性返回ObjectFactory
+ * ObjectFactory用来创建各种模型对象
+ * ObjectFactory的fileProperty创建一个新的 RegularFileProperty，它使用项目目录来解析相对路径
+ */
+def greetingFile = objects.fileProperty()
+
+tasks.register('greet', GreetingToFileTask) {
+    destination = greetingFile
+}
+
+tasks.register('sayGreeting') {
+    dependsOn greet
+
+    doLast {
+        def file = greetingFile.get().asFile
+        println "${file.text} (file: ${file.name})"
+    }
+}
+
+/**
+ * Project的layout属性返回ProjectLayout， 表示工程布局，提供返回工程各种位置的方法
+ * buildDirectory表示输出目录
+ *
+ */
+greetingFile.set(layout.buildDirectory.file('hello.txt'))
+
+class GreetingPlugin implements Plugin<Project> {
+    void apply(Project project) {
+
+
+        project.task('hello') {
+
+            // 向任务添加一个action
+           doLast {
+                println 'Hello from the GreetingPlugin'
+            }
+        }
+
+        project.task("showSourceSetInfo") {
+
+            doLast {
+//                project.getS
+            }
+        }
+    }
+
+
+    void printSourceSetInfo(SourceSet sourceSet) {
+        println("-------- sourceSetInfo -----------")
+        println("name:${sourceSet.name}")
+        println("allJava:${sourceSet.allJava.srcDirs}")
+        println("compileClassPath:${sourceSet.compileClasspath.files}")
+        println("ouput:${sourceSet.output.files}")
+        println("sourceSet.java.srcDirs:${sourceSet.java.srcDirs}")
+        println("-------- sourceSetInfo -----------")
+    }
+
+}
+
+// Apply the plugin
+apply plugin: GreetingPlugin

@@ -1,0 +1,2 @@
+com/test/gradle/Foo.java
+ com.test.gradle.Foo

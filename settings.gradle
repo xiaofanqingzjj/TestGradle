@@ -1,4 +1,42 @@
 rootProject.name = 'TestGradle'
 
-include ":testGroovy"
+//include ":testGroovy"
 include ":app"
+
+
+gradle.addBuildListener(new BuildListener() {
+    void buildStarted(Gradle gradle) {
+
+    }
+
+    @Override
+    void settingsEvaluated(Settings settings) {
+        println("settingsEvaluated")
+    }
+
+    @Override
+    void projectsLoaded(Gradle gradle) {
+        final rootProj = gradle.rootProject
+        final allProjs = rootProj.allprojects
+        println("projectsLoaded allProjs:$allProjs")
+
+        //这时候还没有task
+//        task:${gradle.taskGraph.allTasks}
+
+    }
+
+    @Override
+    void projectsEvaluated(Gradle gradle) {
+
+        gradle.taskGraph.whenReady {
+            println("projectsEvaluated: tasks:${gradle.taskGraph.allTasks}")
+        }
+
+    }
+
+    @Override
+    void buildFinished(BuildResult result) {
+
+    }
+})
+
