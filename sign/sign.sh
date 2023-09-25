@@ -1,18 +1,21 @@
+#!/usr/bin/env bash
 
-#if [ $#  ]
+if [ $# -lt 1 ]; then
+    echo "Usage: sign <input.apk>"
+    exit 1
+fi
 
 # password tciegxy
 
 inputFile=$1
-outputFile=$2
-withV2=$3
+outputFile="${inputFile%.*}_signed.apk"
 
-#v2=false
-#
-#if [ $3  true ]
-#than
-#  v2=true
-#fi
+
+if [ -z ${ANDROID_HOME} ]; then #先判断是否有ANDROID_HOME环境变量
+    echo "You should set \$ANDROID_HOME env"
+    exit 1
+fi
+
 
 
 apkSigner=$ANDROID_HOME/build-tools/25.0.0/apkSigner
@@ -21,4 +24,8 @@ echo "input:$inputFile, outputFile:$outputFile"
 
 ${apkSigner} sign  --ks xy.keystore --out ${outputFile} -v --v1-signing-enabled true --v2-signing-enabled false ${inputFile}
 
-${apkSigner} verify -v --print-certs ${outputFile}
+# auto input password
+
+
+
+${apkSigner} verify ${outputFile}

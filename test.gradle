@@ -1,15 +1,46 @@
 
+println("apply test.gradle")
 
+
+// 下面是一些创建task的方式
+
+// 通过task方法创建一个Task
 task helloWolrd  {
     doLast {
         println("hello world!!")
     }
-
 }
+
+// 调用TaskContainer的create方法
+tasks.create("task1") {
+    doLast {
+        println("do task1")
+    }
+}
+
+tasks.create("name": "task2")  {
+    doLast {
+        println("do task2")
+    }
+}
+
+
+
+//class  MyProject extends {
+//
+//}
+
+class MyTask extends DefaultTask {
+    @Override
+    String getName() {
+        return super.getName()
+    }
+}
+
+
 
 // 一个拷贝文件的task
 task copy(type: Copy, group: "Custom", description: "copy sources to dest") {
     from "src" // 相对根目录
     into "dest" // 相对根目录
 }
-
